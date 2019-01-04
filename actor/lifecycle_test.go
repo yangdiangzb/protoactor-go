@@ -15,7 +15,7 @@ func TestActorCanReplyOnStarting(t *testing.T) {
 		}
 	}))
 	assert.NoError(t, err)
-	a.GracefulStop()
+	rootContext.StopFuture(a).Wait()
 	assertFutureSuccess(future, t)
 }
 
@@ -28,6 +28,6 @@ func TestActorCanReplyOnStopping(t *testing.T) {
 		}
 	}))
 	assert.NoError(t, err)
-	a.GracefulStop()
+	rootContext.StopFuture(a).Wait()
 	assertFutureSuccess(future, t)
 }

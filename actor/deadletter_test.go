@@ -20,7 +20,7 @@ func TestDeadLetterAfterStop(t *testing.T) {
 	})
 	defer eventstream.Unsubscribe(sub)
 
-	a.GracefulStop()
+	rootContext.StopFuture(a).Wait()
 
 	rootContext.Send(a, "hello")
 
@@ -32,7 +32,7 @@ func TestDeadLetterWatchRespondsWithTerminate(t *testing.T) {
 	pid, err := rootContext.Spawn(PropsFromProducer(NewBlackHoleActor))
 	assert.NoError(t, err)
 	//stop id
-	pid.GracefulStop()
+	rootContext.StopFuture(pid).Wait()
 	f := NewFuture(testTimeout)
 	//send a watch message, from our future
 	pid.sendSystemMessage(&Watch{Watcher: f.PID()})

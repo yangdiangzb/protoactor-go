@@ -7,6 +7,7 @@ type Context interface {
 	SenderContext
 	ReceiverContext
 	SpawnerContext
+	StopperContext
 
 	// Parent returns the PID for the current actors parent
 	Parent() *PID
@@ -89,4 +90,18 @@ type SpawnerContext interface {
 	//
 	// ErrNameExists will be returned if id already exists
 	SpawnNamed(props *Props, id string) (*PID, error)
+}
+
+type StopperContext interface {
+	// Stop will stop actor immediately regardless of existing user messages in mailbox.
+	Stop(pid *PID)
+
+	// StopFuture will stop actor immediately regardless of existing user messages in mailbox, and return its future.
+	StopFuture(pid *PID) *Future
+
+	// Poison will tell actor to stop after processing current user messages in mailbox.
+	Poison(pid *PID)
+
+	// PoisonFuture will tell actor to stop after processing current user messages in mailbox, and return its future.
+	PoisonFuture(pid *PID) *Future
 }
