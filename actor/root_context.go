@@ -80,8 +80,10 @@ func (rc *RootContext) RequestFuture(pid *PID, message interface{}, timeout time
 
 func (rc *RootContext) sendUserMessage(pid *PID, message interface{}) {
 	if rc.senderMiddleware != nil {
+		// Request based middleware
 		rc.senderMiddleware(rc, pid, WrapEnvelope(message))
 	} else {
+		// tell based middleware
 		pid.sendUserMessage(message)
 	}
 }
